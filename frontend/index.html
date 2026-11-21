@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoDev Studio — AI Software Team</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          boxShadow: {
+            'xs': '0 1px 2px 0 rgba(0, 0, 0, 0.04)',
+            'card': '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)',
+            'card-hover': '0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Marked.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <style>
+    /* Custom Clean Light Scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f8fafc;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Crisp Light-Mode Markdown Body */
+    .markdown-body {
+      color: #334155;
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+    .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 {
+      color: #0f172a;
+      font-weight: 600;
+      margin-top: 1.15rem;
+      margin-bottom: 0.45rem;
+    }
+    .markdown-body h1 { font-size: 1.3rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.35rem; }
+    .markdown-body h2 { font-size: 1.125rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.25rem; }
+    .markdown-body h3 { font-size: 0.975rem; }
+    .markdown-body p { margin-bottom: 0.75rem; }
+    .markdown-body ul, .markdown-body ol {
+      padding-left: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .markdown-body ul { list-style-type: disc; }
+    .markdown-body ol { list-style-type: decimal; }
+    .markdown-body li { margin-bottom: 0.2rem; }
+    .markdown-body code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.825em;
+      background: #f1f5f9;
+      color: #4338ca;
+      padding: 0.125rem 0.325rem;
+      border-radius: 0.25rem;
+      border: 1px solid #e2e8f0;
+    }
+    .markdown-body pre {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      padding: 0.85rem;
+      overflow-x: auto;
+      margin: 0.85rem 0;
+    }
+    .markdown-body pre code {
+      background: transparent;
+      border: none;
+      padding: 0;
+      color: #0f172a;
+      font-size: 0.8125rem;
+    }
+    .markdown-body table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.85rem 0;
+      font-size: 0.8125rem;
+    }
+    .markdown-body th, .markdown-body td {
+      border: 1px solid #e2e8f0;
+      padding: 0.45rem 0.65rem;
+      text-align: left;
+    }
+    .markdown-body th {
+      background: #f8fafc;
+      color: #334155;
+      font-weight: 600;
+    }
+    .markdown-body tr:nth-child(even) {
+      background: #fbfcfe;
+    }
+    .markdown-body blockquote {
+      border-left: 3px solid #6366f1;
+      padding: 0.35rem 0.75rem;
+      color: #475569;
+      background: #f8fafc;
+      border-radius: 0 0.375rem 0.375rem 0;
+      margin: 0.75rem 0;
+    }
+    .markdown-body hr {
+      border: 0;
+      border-top: 1px solid #e2e8f0;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased selection:bg-indigo-100 selection:text-indigo-900">
+
+  <!-- ========================================================================= -->
+  <!-- 1. TOP HEADER                                                             -->
+  <!-- ========================================================================= -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-200 px-4 sm:px-6 py-2.5 transition-all">
+    <div class="max-w-[1440px] mx-auto flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Left: Clean Brand & Subtitle -->
+      <div class="flex items-center gap-3">
+        <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-600 text-white shadow-xs">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-bold text-sm sm:text-base tracking-tight text-slate-900">
+              AutoDev Studio
+            </h1>
+            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-600 border border-slate-200">
+              v2.0
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-500 font-normal">
+            AI Software Team • 20 Specialized Agents
+          </p>
+        </div>
+      </div>
+
+      <!-- Center & Right: Live Stats Pill & Export Action -->
+      <div class="flex items-center gap-2.5 flex-wrap">
+        
+        <!-- Live Memory Stats Pill -->
+        <div id="memoryStatsPill" class="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs text-slate-600">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          <span class="text-slate-500 font-medium text-[11px]">Team Memory:</span>
+          <span id="statRunsCount" class="font-medium text-slate-800 text-[11px]">0 Projects Built</span>
+          <span class="text-slate-300">•</span>
+          <span id="statRulesCount" class="font-medium text-indigo-700 text-[11px] flex items-center gap-1">
+            <svg class="w-3 h-3 inline text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+            </svg>
+            0 Lessons Saved
+          </span>
+          <button id="refreshMemoryBtn" title="Refresh Memory State" class="text-slate-400 hover:text-slate-700 transition ml-0.5 p-0.5 rounded hover:bg-slate-200/60">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Download Full Blueprint (.md) Button -->
+        <button id="downloadBlueprintBtn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 hover:border-slate-300 transition shadow-xs active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
+          <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+          <span>Download Full Blueprint (.md)</span>
+        </button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- MAIN LAYOUT (WORKSPACE + RIGHT SIDEBAR)                                   -->
+  <!-- ========================================================================= -->
+  <div class="max-w-[1440px] mx-auto w-full px-4 py-3.5 flex-1 flex flex-col xl:flex-row gap-4">
+
+    <!-- ======================================================================= -->
+    <!-- 2. MAIN WORKSPACE (LEFT & CENTER COLUMN)                                -->
+    <!-- ======================================================================= -->
+    <main class="flex-1 flex flex-col gap-4 min-w-0">
+
+      <!-- Section 1: New Project Brief Card -->
+      <section class="rounded-xl bg-white border border-slate-200 p-3.5 sm:p-4 shadow-card">
+        <div class="flex flex-col gap-3">
+          
+          <!-- Section Heading & Quick Prompts -->
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 class="text-sm font-semibold text-slate-900">
+                New Project Brief
+              </h2>
+              <p class="text-xs text-slate-500">
+                Describe what you want to build and let the 20-agent team take it from concept to code.
+              </p>
+            </div>
+            
+            <!-- Quick Templates (Subtle Tags) -->
+            <div class="flex items-center gap-1.5 text-xs flex-wrap">
+              <span class="text-slate-400 text-[11px] font-medium">Examples:</span>
+              <button class="sample-idea-btn px-2 py-0.5 rounded text-[11px] font-medium bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 transition" data-idea="AI Video Repurposing SaaS for YouTube creators with Stripe billing and multi-tenant workspaces" data-guidance="FastAPI backend, Next.js frontend, SQLite/Postgres with Celery task queues and strict GDPR privacy.">
+                Video Repurposing AI
+              </button>
+              <button class="sample-idea-btn px-2 py-0.5 rounded text-[11px] font-medium bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 transition" data-idea="Multi-Cloud FinOps and Idle Resource Cost Guard SaaS with automated Slack alerts and AWS/GCP integrations" data-guidance="Emphasize zero-trust read-only IAM roles, high throughput telemetry ingestion, and p95 latency under 200ms.">
+                Cloud Cost Guard
+              </button>
+              <button class="sample-idea-btn px-2 py-0.5 rounded text-[11px] font-medium bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 transition" data-idea="AI Customer Support Agent Hub with RAG vector search over internal Notion docs and live Zendesk sync" data-guidance="Require strict tenant isolation, hybrid search (keyword + embeddings), and Stripe usage-based metering.">
+                Support Agent Hub
+              </button>
+            </div>
+          </div>
+
+          <!-- Compact Inputs Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <!-- Project Idea Input (Col span 2) -->
+            <div class="md:col-span-2 flex flex-col gap-1">
+              <label for="projectIdeaInput" class="text-xs font-medium text-slate-700 flex items-center justify-between">
+                <span>Project Description <span class="text-indigo-600">*</span></span>
+                <span id="charCount" class="text-[10px] text-slate-400 font-normal">Required</span>
+              </label>
+              <textarea id="projectIdeaInput" rows="2" placeholder="e.g. Build a Developer Changelog tool that syncs GitHub releases, drafts release notes, and schedules social announcements..." class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition resize-none"></textarea>
+            </div>
+
+            <!-- Optional Guidance Input (Col span 1) -->
+            <div class="flex flex-col gap-1">
+              <label for="userFeedbackInput" class="text-xs font-medium text-slate-700 flex items-center justify-between">
+                <span>Technical Notes & Constraints</span>
+                <span class="text-[10px] text-slate-400 font-normal">Optional</span>
+              </label>
+              <textarea id="userFeedbackInput" rows="2" placeholder="e.g. Must include Stripe metered billing, FastAPI, SQLite, and clean modular code..." class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition resize-none"></textarea>
+            </div>
+          </div>
+
+          <!-- Action Bar & Progress -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100">
+            <div class="flex items-center gap-2.5">
+              <!-- Launch Button -->
+              <button id="launchPipelineBtn" class="flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium text-xs bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
+                <svg id="launchBtnIcon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span id="launchBtnText">Start Building</span>
+              </button>
+
+              <!-- Abort Button -->
+              <button id="abortPipelineBtn" class="hidden flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-medium bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+                <span>Stop</span>
+              </button>
+            </div>
+
+            <!-- Live Status & Progress -->
+            <div class="flex items-center gap-3 text-xs">
+              <div id="liveStreamBadge" class="hidden flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-[11px] font-medium">
+                <span class="relative flex h-1.5 w-1.5">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-amber-500"></span>
+                </span>
+                <span id="liveStatusText">Starting workflow...</span>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <span class="text-slate-500 text-[11px]">Progress:</span>
+                <span id="pipelineProgressFraction" class="font-semibold text-slate-800 text-[11px]">0 / 20</span>
+                <div class="w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+                  <div id="pipelineProgressBar" class="h-full bg-indigo-600 rounded-full transition-all duration-200 w-0"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Section 2: Team Workflow (20 Agents Grid) -->
+      <section class="flex flex-col gap-2.5">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <h2 class="text-sm font-semibold text-slate-900">
+              Team Workflow (20 Agents)
+            </h2>
+            <span class="text-[11px] text-slate-500 font-normal">
+              4 sequential phases • click any step to view output
+            </span>
+          </div>
+        </div>
+
+        <!-- 4-Phase Compact Grid Container -->
+        <div id="phasesGridContainer" class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-3">
+          
+          <!-- Phase 1: Discovery & Planning -->
+          <div class="phase-column flex flex-col gap-2 rounded-xl bg-white border border-slate-200 p-3 shadow-card" data-phase="1">
+            <div class="flex items-center justify-between pb-1.5 border-b border-slate-100">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                <h3 class="text-xs font-semibold text-slate-800">1. Discovery & Planning</h3>
+              </div>
+              <span class="text-[10px] font-mono text-slate-400">#1–#5</span>
+            </div>
+            <div id="phaseList1" class="flex flex-col gap-1.5">
+              <!-- Compact Agent Cards 1-5 -->
+            </div>
+          </div>
+
+          <!-- Phase 2: Architecture -->
+          <div class="phase-column flex flex-col gap-2 rounded-xl bg-white border border-slate-200 p-3 shadow-card" data-phase="2">
+            <div class="flex items-center justify-between pb-1.5 border-b border-slate-100">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+                <h3 class="text-xs font-semibold text-slate-800">2. System Architecture</h3>
+              </div>
+              <span class="text-[10px] font-mono text-slate-400">#6–#10</span>
+            </div>
+            <div id="phaseList2" class="flex flex-col gap-1.5">
+              <!-- Compact Agent Cards 6-10 -->
+            </div>
+          </div>
+
+          <!-- Phase 3: Development -->
+          <div class="phase-column flex flex-col gap-2 rounded-xl bg-white border border-slate-200 p-3 shadow-card" data-phase="3">
+            <div class="flex items-center justify-between pb-1.5 border-b border-slate-100">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                <h3 class="text-xs font-semibold text-slate-800">3. Development</h3>
+              </div>
+              <span class="text-[10px] font-mono text-slate-400">#11–#15</span>
+            </div>
+            <div id="phaseList3" class="flex flex-col gap-1.5">
+              <!-- Compact Agent Cards 11-15 -->
+            </div>
+          </div>
+
+          <!-- Phase 4: Testing & Handover -->
+          <div class="phase-column flex flex-col gap-2 rounded-xl bg-white border border-slate-200 p-3 shadow-card" data-phase="4">
+            <div class="flex items-center justify-between pb-1.5 border-b border-slate-100">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <h3 class="text-xs font-semibold text-slate-800">4. Testing & Handover</h3>
+              </div>
+              <span class="text-[10px] font-mono text-slate-400">#16–#20</span>
+            </div>
+            <div id="phaseList4" class="flex flex-col gap-1.5">
+              <!-- Compact Agent Cards 16-20 -->
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Section 3: Agent Output Inspector Panel -->
+      <section id="inspectorSection" class="rounded-xl bg-white border border-slate-200 shadow-card overflow-hidden flex flex-col">
+        
+        <!-- Inspector Header -->
+        <div class="px-4 py-3 bg-slate-50/60 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2.5">
+          <div class="flex items-center gap-2.5">
+            <div id="inspectorBadge" class="w-7 h-7 rounded-md bg-indigo-50 border border-indigo-200 text-indigo-700 flex items-center justify-center font-bold font-mono text-xs">
+              #1
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 id="inspectorAgentName" class="font-semibold text-slate-900 text-xs sm:text-sm">
+                  Market Researcher
+                </h3>
+                <span id="inspectorPhaseTag" class="text-[10px] px-2 py-0.5 rounded-full bg-white text-slate-600 border border-slate-200">
+                  Discovery & Product
+                </span>
+                <span id="inspectorStatusBadge" class="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 border border-slate-200 font-medium">
+                  Pending
+                </span>
+              </div>
+              <p id="inspectorRoleDesc" class="text-[11px] text-slate-500 mt-0.5">
+                Analyzes market viability, target audience demographics, pain points, market size, and core value proposition.
+              </p>
+            </div>
+          </div>
+
+          <!-- Inspector Action Buttons -->
+          <div class="flex items-center gap-2">
+            <button id="copyInspectorOutputBtn" class="flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 transition active:scale-95 shadow-xs">
+              <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+              </svg>
+              <span id="copyBtnText">Copy Markdown</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Lessons Applied & Learned Context Bar -->
+        <div id="inspectorMemoryPillBar" class="hidden px-4 py-2 bg-indigo-50/40 border-b border-indigo-100 flex flex-wrap items-center gap-1.5 text-xs">
+          <span class="text-indigo-900 font-medium text-[11px] flex items-center gap-1">
+            <svg class="w-3 h-3 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.57M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Lessons applied:
+          </span>
+          <div id="inspectorLessonsContainer" class="flex flex-wrap items-center gap-1">
+            <!-- Dynamic tags -->
+          </div>
+        </div>
+
+        <!-- Inspector Body (Rendered Markdown) -->
+        <div class="p-4 sm:p-5 max-h-[460px] overflow-y-auto bg-white">
+          <div id="inspectorMarkdownContent" class="markdown-body">
+            <div class="text-center py-10 text-slate-400">
+              <svg class="w-10 h-10 mx-auto mb-2 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+              <p class="text-xs font-medium text-slate-600">No output generated yet for this agent.</p>
+              <p class="text-[11px] text-slate-400 mt-0.5">Click "Start Building" above to run the team workflow or click any completed step to read its deliverable.</p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- ======================================================================= -->
+    <!-- 3. RIGHT SIDEBAR: "TEAM MEMORY & NOTES"                                 -->
+    <!-- ======================================================================= -->
+    <aside class="w-full xl:w-80 2xl:w-88 flex flex-col gap-4 shrink-0">
+
+      <div class="rounded-xl bg-white border border-slate-200 p-3.5 sm:p-4 shadow-card flex flex-col gap-4 sticky top-16">
+        
+        <!-- Memory Vault Title -->
+        <div class="flex items-center justify-between pb-2.5 border-b border-slate-100">
+          <div class="flex items-center gap-2">
+            <div class="p-1.5 rounded-lg bg-indigo-50 text-indigo-600 border border-indigo-100">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+              </svg>
+            </div>
+            <div>
+              <h2 class="font-semibold text-slate-900 text-xs sm:text-sm">Team Memory & Notes</h2>
+              <p class="text-[10px] text-slate-500">Continuous knowledge base across runs</p>
+            </div>
+          </div>
+          <span id="vaultTotalBadge" class="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
+            0 Rules
+          </span>
+        </div>
+
+        <!-- Teach an Agent Form -->
+        <div class="rounded-lg bg-slate-50/70 border border-slate-200 p-3 flex flex-col gap-2.5">
+          <div class="flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+            <h3 class="text-xs font-semibold text-slate-800">Teach the Team</h3>
+          </div>
+          <p class="text-[11px] text-slate-500">
+            Add a note or rule for the team to remember in future builds.
+          </p>
+
+          <form id="teachAgentForm" class="flex flex-col gap-2">
+            <!-- Target Agent Selector -->
+            <div>
+              <label for="teachAgentSelect" class="text-[10px] font-medium text-slate-600 block mb-0.5">Target Agent</label>
+              <select id="teachAgentSelect" class="w-full bg-white border border-slate-200 rounded-md px-2 py-1 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                <option value="global">All 20 Agents (Global Note)</option>
+                <!-- Dynamically populated -->
+              </select>
+            </div>
+
+            <!-- Category Selector -->
+            <div>
+              <label for="teachCategorySelect" class="text-[10px] font-medium text-slate-600 block mb-0.5">Category</label>
+              <select id="teachCategorySelect" class="w-full bg-white border border-slate-200 rounded-md px-2 py-1 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                <option value="architecture">Architecture & DB</option>
+                <option value="security">Security & Auth</option>
+                <option value="coding">Code Standards & Clean Design</option>
+                <option value="pricing">Pricing & Monetization</option>
+                <option value="performance">Performance</option>
+                <option value="general" selected>General Principle</option>
+              </select>
+            </div>
+
+            <!-- Lesson Content -->
+            <div>
+              <label for="teachLessonInput" class="text-[10px] font-medium text-slate-600 block mb-0.5">Rule / Lesson</label>
+              <textarea id="teachLessonInput" rows="2" placeholder="e.g. Always index foreign keys and use UUIDv4 for public API keys." required class="w-full bg-white border border-slate-200 rounded-md px-2 py-1 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none"></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="teachSubmitBtn" class="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition active:scale-95 disabled:opacity-50">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+              </svg>
+              <span>Save Note</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Saved Lessons Stream -->
+        <div class="flex flex-col gap-2">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-semibold text-slate-800">Saved Lessons</h3>
+            <span id="rulesFilteredCount" class="text-[10px] text-slate-400">All</span>
+          </div>
+
+          <!-- Rules Search -->
+          <div class="relative">
+            <input type="text" id="rulesSearchInput" placeholder="Search saved lessons..." class="w-full bg-white border border-slate-200 rounded-md pl-7 pr-2.5 py-1 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+            <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+          </div>
+
+          <!-- Rules Scroll Area -->
+          <div id="memoryRulesList" class="flex flex-col gap-1.5 max-h-[340px] overflow-y-auto pr-0.5">
+            <div class="text-center py-5 text-slate-400 text-xs">
+              Loading memory...
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </aside>
+
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT APPLICATION LOGIC                                              -->
+  <!-- ========================================================================= -->
+  <script>
+    if (window.marked) {
+      marked.setOptions({
+        breaks: true,
+        gfm: true
+      });
+    }
+
+    // 20 Specialized Agents Roster
+    const AGENTS_ROSTER = [
+      { id: 1, phaseNum: 1, phase: "Discovery & Planning", name: "Market Researcher", role: "Analyzes ICP, market size, and core value proposition." },
+      { id: 2, phaseNum: 1, phase: "Discovery & Planning", name: "Competitor Analyst", role: "Identifies direct competitors and product moat." },
+      { id: 3, phaseNum: 1, phase: "Discovery & Planning", name: "PRD Writer", role: "Drafts comprehensive requirements, journeys, and OKRs." },
+      { id: 4, phaseNum: 1, phase: "Discovery & Planning", name: "User Story Mapper", role: "Builds user stories with Given/When/Then acceptance criteria." },
+      { id: 5, phaseNum: 1, phase: "Discovery & Planning", name: "Feature Prioritizer", role: "Applies RICE and MoSCoW to scope the lean MVP." },
+
+      { id: 6, phaseNum: 2, phase: "System Architecture", name: "Tech Stack Selector", role: "Selects battle-tested frameworks, databases, and hosting." },
+      { id: 7, phaseNum: 2, phase: "System Architecture", name: "DB Schema Designer", role: "Designs normalized 3NF schemas, foreign keys, and indexes." },
+      { id: 8, phaseNum: 2, phase: "System Architecture", name: "API Contract Architect", role: "Specifies RESTful OpenAPI contracts and JSON schemas." },
+      { id: 9, phaseNum: 2, phase: "System Architecture", name: "Security Auditor", role: "Audits against OWASP Top 10, JWT lifecycles, and RBAC." },
+      { id: 10, phaseNum: 2, phase: "System Architecture", name: "Cloud Cost Estimator", role: "Models infrastructure unit economics from launch to 10k users." },
+
+      { id: 11, phaseNum: 3, phase: "Development", name: "Backend Developer", role: "Implements production-ready routers, models, and service logic." },
+      { id: 12, phaseNum: 3, phase: "Development", name: "Frontend Developer", role: "Builds responsive client components and modern UI views." },
+      { id: 13, phaseNum: 3, phase: "Development", name: "Auth & Billing Integrator", role: "Integrates user auth, session guards, and Stripe billing." },
+      { id: 14, phaseNum: 3, phase: "Development", name: "API Connector", role: "Implements third-party SDK clients and background worker hooks." },
+      { id: 15, phaseNum: 3, phase: "Development", name: "Code Refactorer", role: "Refactors code for Clean Architecture and DRY principles." },
+
+      { id: 16, phaseNum: 4, phase: "Testing & Handover", name: "Unit Test Generator", role: "Writes automated test suites, pytest fixtures, and mocks." },
+      { id: 17, phaseNum: 4, phase: "Testing & Handover", name: "Bug Hunter", role: "Conducts static code analysis and patches defect vectors." },
+      { id: 18, phaseNum: 4, phase: "Testing & Handover", name: "Performance Reviewer", role: "Evaluates N+1 query risks, Redis caching, and p95 latency." },
+      { id: 19, phaseNum: 4, phase: "Testing & Handover", name: "Reflexion Meta-Critic", role: "Extracts systemic engineering post-mortem rules." },
+      { id: 20, phaseNum: 4, phase: "Testing & Handover", name: "Release & Docs Synthesizer", role: "Synthesizes master README.md and production launch checklist." }
+    ];
+
+    // Global State
+    const state = {
+      agents: AGENTS_ROSTER,
+      memory: { stats: { total_runs: 0, total_learned_rules: 0, lessons_per_agent: {} }, lessons: [], runs: [] },
+      agentStatuses: {},
+      selectedAgentId: 1,
+      currentRunningId: null,
+      eventSource: null,
+      isStreaming: false,
+      lastRunIdea: ""
+    };
+
+    // Initialize agent statuses
+    state.agents.forEach(a => {
+      state.agentStatuses[a.id] = {
+        status: 'pending',
+        output: '',
+        applied_lessons: [],
+        new_lesson: ''
+      };
+    });
+
+    // DOM Elements Mapping
+    const elements = {
+      statRunsCount: document.getElementById('statRunsCount'),
+      statRulesCount: document.getElementById('statRulesCount'),
+      refreshMemoryBtn: document.getElementById('refreshMemoryBtn'),
+      downloadBlueprintBtn: document.getElementById('downloadBlueprintBtn'),
+      projectIdeaInput: document.getElementById('projectIdeaInput'),
+      userFeedbackInput: document.getElementById('userFeedbackInput'),
+      launchPipelineBtn: document.getElementById('launchPipelineBtn'),
+      launchBtnIcon: document.getElementById('launchBtnIcon'),
+      launchBtnText: document.getElementById('launchBtnText'),
+      abortPipelineBtn: document.getElementById('abortPipelineBtn'),
+      liveStreamBadge: document.getElementById('liveStreamBadge'),
+      liveStatusText: document.getElementById('liveStatusText'),
+      pipelineProgressFraction: document.getElementById('pipelineProgressFraction'),
+      pipelineProgressBar: document.getElementById('pipelineProgressBar'),
+      inspectorBadge: document.getElementById('inspectorBadge'),
+      inspectorAgentName: document.getElementById('inspectorAgentName'),
+      inspectorPhaseTag: document.getElementById('inspectorPhaseTag'),
+      inspectorStatusBadge: document.getElementById('inspectorStatusBadge'),
+      inspectorRoleDesc: document.getElementById('inspectorRoleDesc'),
+      inspectorMarkdownContent: document.getElementById('inspectorMarkdownContent'),
+      copyInspectorOutputBtn: document.getElementById('copyInspectorOutputBtn'),
+      copyBtnText: document.getElementById('copyBtnText'),
+      inspectorMemoryPillBar: document.getElementById('inspectorMemoryPillBar'),
+      inspectorLessonsContainer: document.getElementById('inspectorLessonsContainer'),
+      vaultTotalBadge: document.getElementById('vaultTotalBadge'),
+      teachAgentSelect: document.getElementById('teachAgentSelect'),
+      teachCategorySelect: document.getElementById('teachCategorySelect'),
+      teachLessonInput: document.getElementById('teachLessonInput'),
+      teachAgentForm: document.getElementById('teachAgentForm'),
+      teachSubmitBtn: document.getElementById('teachSubmitBtn'),
+      memoryRulesList: document.getElementById('memoryRulesList'),
+      rulesSearchInput: document.getElementById('rulesSearchInput'),
+      rulesFilteredCount: document.getElementById('rulesFilteredCount'),
+      toastContainer: document.getElementById('toastContainer')
+    };
+
+    // ---------------------------------------------------------------------------
+    // Render Functions (Crisp Light Mode & Compact Spacing)
+    // ---------------------------------------------------------------------------
+
+    // Render Compact Agent Cards into 4 Phase Columns
+    function renderAgentCards() {
+      for (let p = 1; p <= 4; p++) {
+        const col = document.getElementById(`phaseList${p}`);
+        if (col) col.innerHTML = '';
+      }
+
+      state.agents.forEach(agent => {
+        const st = state.agentStatuses[agent.id] || { status: 'pending' };
+        const phaseCol = document.getElementById(`phaseList${agent.phaseNum}`);
+        if (!phaseCol) return;
+
+        const card = document.createElement('div');
+        card.id = `agentCard_${agent.id}`;
+        card.className = getCardClassList(agent.id);
+        card.onclick = () => selectAgent(agent.id);
+
+        let statusBadgeMarkup = '';
+        if (st.status === 'running') {
+          statusBadgeMarkup = `
+            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-amber-50 text-amber-700 border border-amber-200">
+              <svg class="animate-spin w-2.5 h-2.5 text-amber-600" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+              </svg>
+              Running
+            </span>`;
+        } else if (st.status === 'done') {
+          statusBadgeMarkup = `
+            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <svg class="w-2.5 h-2.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Done
+            </span>`;
+        } else {
+          statusBadgeMarkup = `
+            <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 text-slate-500 border border-slate-200">
+              Pending
+            </span>`;
+        }
+
+        let ruleBadgeMarkup = '';
+        if (st.new_lesson) {
+          ruleBadgeMarkup = `
+            <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-medium bg-indigo-50 text-indigo-700 border border-indigo-200">
+              ⚡ Learned Rule
+            </span>`;
+        } else if (st.applied_lessons && st.applied_lessons.length > 0) {
+          ruleBadgeMarkup = `
+            <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-700 border border-slate-200">
+              Applied Rule
+            </span>`;
+        }
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between gap-1.5">
+            <div class="flex items-center gap-1.5 truncate">
+              <span class="font-mono text-[10px] font-semibold text-slate-400">#${agent.id}</span>
+              <h4 class="text-xs font-semibold text-slate-800 truncate" title="${agent.name}">
+                ${agent.name}
+              </h4>
+            </div>
+            ${statusBadgeMarkup}
+          </div>
+          <p class="text-[11px] text-slate-500 truncate mt-0.5">
+            ${agent.role}
+          </p>
+          ${ruleBadgeMarkup ? `<div class="mt-1 flex items-center gap-1 flex-wrap">${ruleBadgeMarkup}</div>` : ''}
+        `;
+
+        phaseCol.appendChild(card);
+      });
+    }
+
+    function getCardClassList(agentId) {
+      const isSelected = state.selectedAgentId === agentId;
+      const st = state.agentStatuses[agentId] || { status: 'pending' };
+
+      let base = "agent-card group p-2 rounded-lg border transition-all duration-150 cursor-pointer text-left select-none ";
+
+      if (isSelected) {
+        base += "bg-white border-indigo-500 ring-2 ring-indigo-500/20 shadow-xs ";
+      } else if (st.status === 'running') {
+        base += "bg-amber-50/60 border-amber-300 ring-1 ring-amber-300/40 shadow-xs ";
+      } else if (st.status === 'done') {
+        base += "bg-white hover:bg-slate-50/80 border-slate-200 hover:border-slate-300 shadow-xs ";
+      } else {
+        base += "bg-white hover:bg-slate-50/60 border-slate-200/80 hover:border-slate-300 shadow-xs ";
+      }
+
+      return base;
+    }
+
+    // Select an Agent and update Inspector
+    function selectAgent(agentId) {
+      state.selectedAgentId = agentId;
+      const agent = state.agents.find(a => a.id === agentId);
+      if (!agent) return;
+
+      const st = state.agentStatuses[agentId] || { status: 'pending', output: '', applied_lessons: [], new_lesson: '' };
+
+      elements.inspectorBadge.innerText = `#${agent.id}`;
+      elements.inspectorAgentName.innerText = agent.name;
+      elements.inspectorPhaseTag.innerText = agent.phase;
+      elements.inspectorRoleDesc.innerText = agent.role;
+
+      if (st.status === 'running') {
+        elements.inspectorStatusBadge.className = "text-[10px] px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 font-medium";
+        elements.inspectorStatusBadge.innerText = "Running";
+      } else if (st.status === 'done') {
+        elements.inspectorStatusBadge.className = "text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium";
+        elements.inspectorStatusBadge.innerText = "Completed";
+      } else {
+        elements.inspectorStatusBadge.className = "text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 border border-slate-200 font-medium";
+        elements.inspectorStatusBadge.innerText = "Pending";
+      }
+
+      // Memory tags in inspector
+      elements.inspectorLessonsContainer.innerHTML = '';
+      let hasLessons = false;
+
+      if (st.applied_lessons && st.applied_lessons.length > 0) {
+        hasLessons = true;
+        st.applied_lessons.forEach(l => {
+          const pill = document.createElement('span');
+          pill.className = "px-1.5 py-0.5 rounded bg-white text-slate-700 border border-slate-200 text-[10px] font-mono shadow-xs";
+          pill.innerText = `Applied: "${l.length > 40 ? l.slice(0, 40) + '...' : l}"`;
+          elements.inspectorLessonsContainer.appendChild(pill);
+        });
+      }
+
+      if (st.new_lesson) {
+        hasLessons = true;
+        const pill = document.createElement('span');
+        pill.className = "px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200 text-[10px] font-mono font-medium shadow-xs";
+        pill.innerText = `Learned Rule: "${st.new_lesson.length > 40 ? st.new_lesson.slice(0, 40) + '...' : st.new_lesson}"`;
+        elements.inspectorLessonsContainer.appendChild(pill);
+      }
+
+      if (hasLessons) {
+        elements.inspectorMemoryPillBar.classList.remove('hidden');
+      } else {
+        elements.inspectorMemoryPillBar.classList.add('hidden');
+      }
+
+      // Render Markdown output
+      if (st.output && st.output.trim().length > 0) {
+        if (window.marked) {
+          elements.inspectorMarkdownContent.innerHTML = marked.parse(st.output);
+        } else {
+          elements.inspectorMarkdownContent.innerText = st.output;
+        }
+      } else {
+        elements.inspectorMarkdownContent.innerHTML = `
+          <div class="text-center py-10 text-slate-400">
+            <svg class="w-10 h-10 mx-auto mb-2 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            <p class="text-xs font-medium text-slate-600">No output generated yet for #${agent.id} (${agent.name}).</p>
+            <p class="text-[11px] text-slate-400 mt-0.5">Status: <span class="capitalize font-medium text-slate-600">${st.status}</span>. Output will render here live when processed.</p>
+          </div>
+        `;
+      }
+
+      renderAgentCards();
+    }
+
+    function populateTeachSelect() {
+      elements.teachAgentSelect.innerHTML = '<option value="global">All 20 Agents (Global Note)</option>';
+      state.agents.forEach(a => {
+        const opt = document.createElement('option');
+        opt.value = a.name;
+        opt.innerText = `#${a.id} — ${a.name}`;
+        elements.teachAgentSelect.appendChild(opt);
+      });
+    }
+
+    // Render Memory Rules list in Right Sidebar
+    function renderMemoryRules(filterText = "") {
+      const lessons = state.memory.lessons || [];
+      const query = filterText.toLowerCase().trim();
+
+      const filtered = lessons.filter(item => {
+        if (!query) return true;
+        const agent = (item.agent_name || "").toLowerCase();
+        const rule = (item.lesson || "").toLowerCase();
+        const cat = (item.category || "").toLowerCase();
+        return agent.includes(query) || rule.includes(query) || cat.includes(query);
+      });
+
+      elements.vaultTotalBadge.innerText = `${lessons.length} Rules`;
+      elements.rulesFilteredCount.innerText = query ? `${filtered.length} matching` : `${lessons.length} total`;
+
+      if (filtered.length === 0) {
+        elements.memoryRulesList.innerHTML = `
+          <div class="text-center py-5 text-slate-400 text-xs">
+            ${query ? 'No matching lessons.' : 'No saved lessons yet. Use the form above to add a note!'}
+          </div>
+        `;
+        return;
+      }
+
+      const sorted = [...filtered].reverse();
+
+      elements.memoryRulesList.innerHTML = '';
+      sorted.forEach(rule => {
+        const item = document.createElement('div');
+        item.className = "p-2 rounded-lg bg-slate-50 border border-slate-200/80 hover:border-slate-300 transition flex flex-col gap-1 text-xs";
+
+        const isGlobal = (rule.agent_name || "").toLowerCase() === 'global' || (rule.agent_name || "").toLowerCase() === 'all';
+
+        item.innerHTML = `
+          <div class="flex items-center justify-between gap-1.5">
+            <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold ${isGlobal ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'bg-slate-100 text-slate-700 border border-slate-200'}">
+              ${rule.agent_name || 'Global'}
+            </span>
+            <span class="text-[10px] text-slate-400 font-mono">
+              ${rule.category || 'general'} • used ${rule.usage_count || 1}x
+            </span>
+          </div>
+          <p class="text-slate-700 text-[11px] leading-snug">
+            ${escapeHtml(rule.lesson)}
+          </p>
+        `;
+        elements.memoryRulesList.appendChild(item);
+      });
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>'"]/g, 
+        tag => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          "'": '&#39;',
+          '"': '&quot;'
+        }[tag] || tag)
+      );
+    }
+
+    function updateProgress(doneCount) {
+      elements.pipelineProgressFraction.innerText = `${doneCount} / 20`;
+      const pct = Math.min(100, Math.round((doneCount / 20) * 100));
+      elements.pipelineProgressBar.style.width = `${pct}%`;
+    }
+
+    // ---------------------------------------------------------------------------
+    // API Client Functions
+    // ---------------------------------------------------------------------------
+
+    async function fetchAgents() {
+      try {
+        const res = await fetch('/api/agents');
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            state.agents = data.map((a, idx) => {
+              const id = a.id || (idx + 1);
+              let phaseNum = 1;
+              if (id > 15) phaseNum = 4;
+              else if (id > 10) phaseNum = 3;
+              else if (id > 5) phaseNum = 2;
+
+              let phaseName = 'Discovery & Planning';
+              if (phaseNum === 2) phaseName = 'System Architecture';
+              if (phaseNum === 3) phaseName = 'Development';
+              if (phaseNum === 4) phaseName = 'Testing & Handover';
+
+              return {
+                id,
+                phaseNum,
+                phase: a.phase || phaseName,
+                name: a.name || `Agent ${id}`,
+                role: a.role_description || ''
+              };
+            });
+            populateTeachSelect();
+            renderAgentCards();
+            selectAgent(state.selectedAgentId);
+          }
+        }
+      } catch (err) {
+        console.warn('Could not fetch /api/agents directly, using defaults:', err);
+      }
+    }
+
+    async function fetchMemory() {
+      try {
+        const res = await fetch('/api/memory');
+        if (res.ok) {
+          const data = await res.json();
+          state.memory = data;
+          
+          const runs = (data.stats && data.stats.total_runs !== undefined) ? data.stats.total_runs : (data.runs ? data.runs.length : 0);
+          const rules = (data.stats && data.stats.total_learned_rules !== undefined) ? data.stats.total_learned_rules : (data.lessons ? data.lessons.length : 0);
+
+          elements.statRunsCount.innerText = `${runs} Projects Built`;
+          elements.statRulesCount.innerHTML = `
+            <svg class="w-3 h-3 inline text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+            </svg>
+            ${rules} Lessons Saved
+          `;
+
+          renderMemoryRules(elements.rulesSearchInput.value);
+        }
+      } catch (err) {
+        console.error('Failed to fetch /api/memory:', err);
+      }
+    }
+
+    async function submitFeedback(agentName, lesson, category) {
+      elements.teachSubmitBtn.disabled = true;
+      elements.teachSubmitBtn.innerHTML = `
+        <svg class="animate-spin w-3 h-3 inline mr-1 text-white" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+        </svg>
+        <span>Saving...</span>
+      `;
+
+      try {
+        const res = await fetch('/api/memory/feedback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            agent_name: agentName,
+            lesson: lesson,
+            category: category
+          })
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.detail || 'Failed to save note');
+        }
+
+        showToast('Note saved to team memory!', 'success');
+        elements.teachLessonInput.value = '';
+        await fetchMemory();
+      } catch (err) {
+        showToast(err.message || 'Error saving note', 'error');
+      } finally {
+        elements.teachSubmitBtn.disabled = false;
+        elements.teachSubmitBtn.innerHTML = `
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          <span>Save Note</span>
+        `;
+      }
+    }
+
+    // ---------------------------------------------------------------------------
+    // Pipeline SSE Streaming (`GET /api/run/stream`)
+    // ---------------------------------------------------------------------------
+    function launchPipeline() {
+      const idea = elements.projectIdeaInput.value.trim();
+      const feedback = elements.userFeedbackInput.value.trim();
+
+      if (!idea) {
+        showToast('Please enter a project description.', 'error');
+        elements.projectIdeaInput.focus();
+        return;
+      }
+
+      state.lastRunIdea = idea;
+
+      state.agents.forEach(a => {
+        state.agentStatuses[a.id] = {
+          status: 'pending',
+          output: '',
+          applied_lessons: [],
+          new_lesson: ''
+        };
+      });
+
+      renderAgentCards();
+      updateProgress(0);
+      selectAgent(1);
+
+      state.isStreaming = true;
+      elements.launchPipelineBtn.disabled = true;
+      elements.launchBtnText.innerText = "Building...";
+      elements.launchBtnIcon.classList.add('animate-spin');
+      elements.abortPipelineBtn.classList.remove('hidden');
+      elements.liveStreamBadge.classList.remove('hidden');
+      elements.liveStatusText.innerText = "Connecting to team...";
+
+      const streamUrl = `/api/run/stream?project_idea=${encodeURIComponent(idea)}&user_feedback=${encodeURIComponent(feedback)}`;
+
+      if (state.eventSource) {
+        state.eventSource.close();
+      }
+
+      const es = new EventSource(streamUrl);
+      state.eventSource = es;
+
+      let completedCount = 0;
+
+      es.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          handleSSEMessage(data, () => {
+            completedCount++;
+            updateProgress(completedCount);
+          });
+        } catch (e) {
+          console.error("Failed to parse SSE JSON:", e, event.data);
+        }
+      };
+
+      es.onerror = (err) => {
+        console.error("SSE stream error:", err);
+        if (completedCount >= 20) {
+          finishPipelineSuccess();
+        } else {
+          showToast('Connection closed or completed.', 'info');
+          finishPipeline();
+        }
+      };
+    }
+
+    function handleSSEMessage(data, onAgentDone) {
+      const { type } = data;
+
+      if (type === 'pipeline_start') {
+        elements.liveStatusText.innerText = `Starting workflow (${data.total_agents || 20} agents)`;
+      } 
+      else if (type === 'phase_start') {
+        elements.liveStatusText.innerText = `Starting ${data.phase}`;
+      } 
+      else if (type === 'agent_start') {
+        const agentId = data.agent_id;
+        state.currentRunningId = agentId;
+        if (state.agentStatuses[agentId]) {
+          state.agentStatuses[agentId].status = 'running';
+        }
+        elements.liveStatusText.innerText = `Running: ${data.name}...`;
+        selectAgent(agentId);
+      } 
+      else if (type === 'agent_complete') {
+        const agentId = data.agent_id;
+        if (state.agentStatuses[agentId]) {
+          state.agentStatuses[agentId].status = 'done';
+          state.agentStatuses[agentId].output = data.output || '';
+          state.agentStatuses[agentId].applied_lessons = data.applied_lessons || [];
+          state.agentStatuses[agentId].new_lesson = data.new_lesson_learned || '';
+        }
+
+        onAgentDone();
+        selectAgent(agentId);
+
+        if (data.new_lesson_learned) {
+          showToast(`${data.name} saved a new lesson!`, 'success');
+          fetchMemory();
+        }
+      } 
+      else if (type === 'pipeline_complete') {
+        finishPipelineSuccess();
+        fetchMemory();
+        showToast('All 20 agents finished building successfully!', 'success');
+      } 
+      else if (type === 'error') {
+        showToast(data.message || 'Error occurred during run', 'error');
+        finishPipeline();
+      }
+    }
+
+    function finishPipelineSuccess() {
+      finishPipeline();
+      updateProgress(20);
+      elements.liveStatusText.innerText = "Build Completed";
+    }
+
+    function finishPipeline() {
+      state.isStreaming = false;
+      state.currentRunningId = null;
+
+      if (state.eventSource) {
+        state.eventSource.close();
+        state.eventSource = null;
+      }
+
+      elements.launchPipelineBtn.disabled = false;
+      elements.launchBtnText.innerText = "Start Building";
+      elements.launchBtnIcon.classList.remove('animate-spin');
+      elements.abortPipelineBtn.classList.add('hidden');
+      renderAgentCards();
+    }
+
+    function abortPipeline() {
+      if (state.eventSource) {
+        state.eventSource.close();
+        state.eventSource = null;
+      }
+      showToast('Build stopped by user.', 'info');
+      finishPipeline();
+      elements.liveStatusText.innerText = "Stopped";
+    }
+
+    // Download Master Markdown Blueprint (.md)
+    function downloadBlueprint() {
+      const idea = state.lastRunIdea || elements.projectIdeaInput.value.trim() || "Untitled Project";
+      
+      let markdown = `# AutoDev Studio — Project Blueprint\n\n`;
+      markdown += `> Generated by AutoDev Studio (20-Agent AI Software Team)\n`;
+      markdown += `> **Project Idea:** ${idea}\n`;
+      markdown += `> **Generated At:** ${new Date().toISOString()}\n\n`;
+      markdown += `## Table of Contents\n\n`;
+
+      state.agents.forEach(a => {
+        markdown += `- [Phase ${a.phaseNum}: #${a.id} ${a.name}](#agent-${a.id}-${a.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')})\n`;
+      });
+      markdown += `\n---\n\n`;
+
+      let hasOutputs = false;
+
+      state.agents.forEach(agent => {
+        const st = state.agentStatuses[agent.id];
+        const output = (st && st.output) ? st.output.trim() : "*Pending execution.*";
+        if (st && st.output && st.output.trim().length > 0) hasOutputs = true;
+
+        markdown += `## Agent #${agent.id}: ${agent.name}\n`;
+        markdown += `**Phase:** ${agent.phase}  \n`;
+        markdown += `**Role:** ${agent.role}  \n\n`;
+
+        if (st && st.new_lesson) {
+          markdown += `> **⚡ Learned Rule:** ${st.new_lesson}\n\n`;
+        }
+
+        markdown += `${output}\n\n`;
+        markdown += `---\n\n`;
+      });
+
+      if (!hasOutputs) {
+        showToast('No agent deliverables to export yet. Start building first!', 'info');
+        return;
+      }
+
+      const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const filename = `AutoDev_Blueprint_${idea.slice(0, 24).replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}.md`;
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      showToast(`Downloaded ${filename}`, 'success');
+    }
+
+    // Copy Inspector Output
+    async function copyInspectorOutput() {
+      const st = state.agentStatuses[state.selectedAgentId];
+      if (!st || !st.output) {
+        showToast('No content to copy yet.', 'info');
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(st.output);
+        elements.copyBtnText.innerText = "Copied!";
+        setTimeout(() => {
+          elements.copyBtnText.innerText = "Copy Markdown";
+        }, 2000);
+        showToast('Markdown copied to clipboard!', 'success');
+      } catch (err) {
+        showToast('Failed to copy', 'error');
+      }
+    }
+
+    // Clean Light Toast Notifications
+    function showToast(message, type = 'info') {
+      const toast = document.createElement('div');
+      let icon = `
+        <svg class="w-4 h-4 text-indigo-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.57M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      `;
+
+      if (type === 'success') {
+        icon = `
+          <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+        `;
+      } else if (type === 'error') {
+        icon = `
+          <svg class="w-4 h-4 text-rose-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        `;
+      }
+
+      toast.className = `flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-slate-200 text-slate-800 shadow-card text-xs font-medium transition-all duration-200 pointer-events-auto transform translate-y-1 opacity-0`;
+      toast.innerHTML = `${icon}<span>${escapeHtml(message)}</span>`;
+
+      elements.toastContainer.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-1', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-1');
+        setTimeout(() => toast.remove(), 250);
+      }, 3000);
+    }
+
+    // ---------------------------------------------------------------------------
+    // Event Listeners & Bootstrapping
+    // ---------------------------------------------------------------------------
+    function initListeners() {
+      elements.launchPipelineBtn.addEventListener('click', launchPipeline);
+      elements.abortPipelineBtn.addEventListener('click', abortPipeline);
+      elements.downloadBlueprintBtn.addEventListener('click', downloadBlueprint);
+      elements.copyInspectorOutputBtn.addEventListener('click', copyInspectorOutput);
+
+      elements.refreshMemoryBtn.addEventListener('click', async () => {
+        elements.refreshMemoryBtn.classList.add('animate-spin');
+        await fetchMemory();
+        setTimeout(() => elements.refreshMemoryBtn.classList.remove('animate-spin'), 500);
+        showToast('Memory state updated.', 'info');
+      });
+
+      elements.teachAgentForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const agentName = elements.teachAgentSelect.value;
+        const category = elements.teachCategorySelect.value;
+        const lesson = elements.teachLessonInput.value.trim();
+
+        if (!lesson) return;
+        submitFeedback(agentName, lesson, category);
+      });
+
+      elements.rulesSearchInput.addEventListener('input', (e) => {
+        renderMemoryRules(e.target.value);
+      });
+
+      document.querySelectorAll('.sample-idea-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          elements.projectIdeaInput.value = btn.getAttribute('data-idea') || '';
+          elements.userFeedbackInput.value = btn.getAttribute('data-guidance') || '';
+          showToast('Example prompt loaded.', 'info');
+        });
+      });
+    }
+
+    async function initApp() {
+      populateTeachSelect();
+      renderAgentCards();
+      selectAgent(1);
+      initListeners();
+
+      await Promise.allSettled([
+        fetchAgents(),
+        fetchMemory()
+      ]);
+    }
+
+    document.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
